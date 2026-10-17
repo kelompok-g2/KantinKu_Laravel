@@ -1,3 +1,7 @@
+# Hasil pengujian terbaru
+
+Pengujian manual konfirmasi dan jebakan telah dilaksanakan pada sesi Codex aktif setelah aturan dibaca eksplisit. Buka [PDF log satu halaman](Log-Test-Prompt-2-3-KantinKu.pdf) dan [respons lengkap](Log-Test-Prompt-2-3-KantinKu.md). Nomor P2/P3 merupakan penamaan kerja dari dua jenis uji pada bagian 11 materi; bukan kutipan prompt bernomor. Penilaian dilakukan oleh asisten yang sama. Bukti penemuan rules otomatis pada sesi IDE baru, tes aplikasi, review anggota lain dan video rollback tetap terpisah. Bagian persiapan di bawah adalah catatan sebelumnya.
+
 # Paket persiapan Tugas Pertemuan 6 - KantinKu
 
 Disiapkan 17 Oktober 2026. Deadline dari foto tugas: 22 Oktober 2026 pukul 08:12;
@@ -29,7 +33,7 @@ pastikan zona waktu yang ditampilkan LMS. Paket ini BELUM merupakan pengumpulan 
 - 01-panduan-admin-review.md: panduan admin, reviewer dan merge.
 - 02-panduan-bukti.md: aturan screenshot dan verifikasi AI rules.
 - 03-log-test-SUMBER.md dan 03-log-test.csv: catatan rinci yang bisa diedit.
-- 03-log-test-TEMPLATE.pdf: formulir interaktif satu halaman, BELUM DIUJI.
+- Log-Test-Prompt-2-3-KantinKu.pdf: formulir interaktif satu halaman, BELUM DIUJI.
 - 04-naskah-video-DRAF.md: alur rekaman; mekanisme rollback menunggu dosen.
 - 05-online-text-DRAF.md: teks dengan permalink dokumen dan PR yang nyata.
 - 06-checklist-final.md: audit pengumpulan.
