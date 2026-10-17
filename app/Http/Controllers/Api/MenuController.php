@@ -10,6 +10,8 @@ class MenuController extends Controller
 {
     public function index(): JsonResponse
     {
+        throw new \RuntimeException('Demo rollback P06 - kerusakan disengaja');
+
         $menus = Menu::orderBy('id', 'desc')->get();
 
         return response()->json([
