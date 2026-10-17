@@ -1,0 +1,87 @@
+{
+  "repos": [
+    {
+      "repo": "Kantinku---flutter",
+      "remote_documents": [
+        {
+          "file": "agents.md",
+          "present": true
+        },
+        {
+          "file": "docs/project_guidelines.md",
+          "present": true
+        },
+        {
+          "file": "docs/pertemuan6/MULAI-DI-SINI.md",
+          "present": true
+        }
+      ],
+      "pr": "https://github.com/kelompok-g2/Kantinku---flutter/pull/1",
+      "sha": "8b3b02b2a3fb0b7c2e6f9d7be6a5ba50faf7270a",
+      "diff_check": true,
+      "reviews": [],
+      "pr_state": "open",
+      "merged": false,
+      "clean": true,
+      "broken_links": [],
+      "head_matches": true,
+      "relative_links_valid": true,
+      "branches": [
+        {
+          "name": "dev",
+          "protected": false
+        },
+        {
+          "name": "feature/context-management",
+          "protected": false
+        },
+        {
+          "name": "main",
+          "protected": true
+        }
+      ]
+    },
+    {
+      "repo": "KantinKu_Laravel",
+      "remote_documents": [
+        {
+          "file": "agents.md",
+          "present": true
+        },
+        {
+          "file": "docs/project_guidelines.md",
+          "present": true
+        },
+        {
+          "file": "docs/pertemuan6/MULAI-DI-SINI.md",
+          "present": true
+        }
+      ],
+      "pr": "https://github.com/kelompok-g2/KantinKu_Laravel/pull/1",
+      "sha": "5b4feb9f629ba579057a47e97cdb74b458b64b3a",
+      "diff_check": true,
+      "reviews": [],
+      "pr_state": "open",
+      "merged": false,
+      "clean": true,
+      "broken_links": [],
+      "head_matches": true,
+      "relative_links_valid": true,
+      "branches": [
+        {
+          "name": "dev",
+          "protected": false
+        },
+        {
+          "name": "feature/context-management",
+          "protected": false
+        },
+        {
+          "name": "main",
+          "protected": true
+        }
+      ]
+    }
+  ],
+  "checked_at": "2026-10-17 14.55 WIB"
+}
