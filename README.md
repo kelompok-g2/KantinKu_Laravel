@@ -1,3 +1,7 @@
+# Backend KantinKu — Kelompok G2
+
+Pertemuan 9 menyediakan 20 endpoint aktif. Lihat [daftar endpoint, autentikasi, dan cara verifikasi](docs/p09-rest-api.md).
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

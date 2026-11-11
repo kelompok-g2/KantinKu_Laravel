@@ -1,5 +1,7 @@
 Arsitektur Backend KantinKu — Laravel MVC + REST API
 
+Catatan berikut mendokumentasikan baseline P05. Lihat [implementasi REST API P09](p09-rest-api.md) untuk fitur backend terkini.
+
 1. Deskripsi Project
 
 KantinKu merupakan aplikasi pemesanan makanan dan minuman kantin kampus. Backend dikembangkan menggunakan Laravel untuk menyediakan REST API yang dapat digunakan oleh aplikasi Flutter.
