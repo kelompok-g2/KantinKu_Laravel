@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\OrderStatusRequest;
+use App\Http\Requests\Api\PlaceOrderRequest;
 use App\Models\Order;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Ramsey\Uuid\Uuid;
 
 class OrderController extends ApiController
@@ -30,20 +31,11 @@ class OrderController extends ApiController
         return $this->success('Detail pesanan.', $order->load('items'));
     }
 
-    public function store(Request $request, OrderService $orders)
+    public function store(PlaceOrderRequest $request, OrderService $orders)
     {
-        $data = $request->validate([
-            'items' => 'required|array|min:1|max:50',
-            'items.*' => 'required|array:menu_id,quantity',
-            'items.*.menu_id' => 'required|integer|min:1|distinct',
-            'items.*.quantity' => 'required|integer|min:1|max:20',
-            'pickup' => 'required|in:asap,after_class,scheduled',
-            'pickup_time' => 'exclude_unless:pickup,scheduled|required|date_format:H:i',
-            'note' => 'nullable|string|max:300',
-        ]);
-        $key = $request->header('Idempotency-Key');
+        $data = $request->validated();
+        $key = $data['idempotency_key'];
         $user = $request->user();
-        validator(['key' => $key], ['key' => 'nullable|uuid'])->validate();
         $token = $key
             ? Uuid::uuid5(Uuid::NAMESPACE_URL, 'kantinku-api-order:'.$user->id.':'.strtolower($key))->toString()
             : (string) Str::uuid();
@@ -54,9 +46,9 @@ class OrderController extends ApiController
         return $this->success($created ? 'Pesanan berhasil dibuat.' : 'Pesanan sudah dibuat.', $order, $created ? 201 : 200);
     }
 
-    public function updateStatus(Request $request, Order $order, OrderService $orders)
+    public function updateStatus(OrderStatusRequest $request, Order $order, OrderService $orders)
     {
-        $data = $request->validate(['status' => ['required', Rule::in(array_values(Order::NEXT))]]);
+        $data = $request->validated();
         $updated = $orders->advance($order, $order->status, $data['status']);
         abort_unless($updated, 409, 'Status pesanan tidak dapat berpindah ke tahap itu.');
 
