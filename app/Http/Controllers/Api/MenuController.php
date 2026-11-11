@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\MenuRequest;
 use App\Models\Menu;
-use Illuminate\Http\Request;
 
 class MenuController extends ApiController
 {
@@ -17,17 +17,17 @@ class MenuController extends ApiController
         return $this->success('Detail menu KantinKu.', $menu);
     }
 
-    public function store(Request $request)
+    public function store(MenuRequest $request)
     {
         $menu = new Menu;
-        $menu->forceFill($this->validated($request, false))->save();
+        $menu->forceFill($request->validated())->save();
 
         return $this->success('Menu berhasil dibuat.', $menu->refresh(), 201);
     }
 
-    public function update(Request $request, Menu $menu)
+    public function update(MenuRequest $request, Menu $menu)
     {
-        $menu->forceFill($this->validated($request, true))->save();
+        $menu->forceFill($request->validated())->save();
 
         return $this->success('Menu berhasil diperbarui.', $menu->refresh());
     }
@@ -37,20 +37,5 @@ class MenuController extends ApiController
         $menu->delete();
 
         return $this->success('Menu berhasil dihapus.');
-    }
-
-    private function validated(Request $request, bool $update): array
-    {
-        $presence = $update ? 'sometimes|required' : 'required';
-
-        return $request->validate([
-            'name' => $presence.'|string|max:255',
-            'category_id' => $presence.'|integer|exists:categories,id',
-            'price' => $presence.'|numeric|decimal:0,2|min:0|max:9999999999.99',
-            'stand' => 'nullable|string|max:255',
-            'description' => 'nullable|string|max:1000',
-            'image_url' => 'nullable|url:http,https|max:255',
-            'is_available' => 'sometimes|boolean',
-        ]);
     }
 }
