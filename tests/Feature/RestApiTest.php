@@ -32,7 +32,7 @@ class RestApiTest extends TestCase
         $login = $this->api('POST', '/api/auth/login', '', $account)->assertOk();
         $this->api('GET', '/api/auth/me', $login->json('data.token'))->assertOk();
         $this->app['auth']->forgetGuards();
-        $this->get('/api/auth/me')->assertUnauthorized()->assertJsonStructure(['message']);
+        $this->get('/api/auth/me')->assertUnauthorized()->assertJsonPath('status', 'error')->assertJsonStructure(['status', 'message', 'data']);
     }
 
     public function test_catalog_orders_and_notifications_work_with_real_permissions(): void
@@ -42,8 +42,8 @@ class RestApiTest extends TestCase
         $customer = $user->createToken('test')->plainTextToken;
         $other = User::factory()->create()->createToken('test')->plainTextToken;
 
-        $this->api('GET', '/api/categories', '')->assertOk()->assertJsonPath('data', []);
-        $this->api('GET', '/api/menus', '')->assertOk()->assertJsonPath('data', []);
+        $this->api('GET', '/api/categories', '')->assertOk()->assertJsonPath('status', 'success')->assertJsonPath('data', []);
+        $this->api('GET', '/api/menus', '')->assertOk()->assertJsonPath('status', 'success')->assertJsonPath('data', []);
         $this->api('POST', '/api/categories', $customer, ['name' => 'Makanan'])->assertForbidden();
         $category = $this->api('POST', '/api/categories', $admin, ['name' => 'Makanan'])
             ->assertCreated()->json('data.id');
@@ -64,24 +64,24 @@ class RestApiTest extends TestCase
         $this->assertDatabaseCount('orders', 1);
         $this->assertDatabaseHas('orders', ['id' => $order, 'total' => 30000, 'payment_method' => 'cash']);
         $this->assertDatabaseHas('order_items', ['order_id' => $order, 'quantity' => 2, 'unit_price' => 15000]);
-        $this->api('GET', '/api/orders', $customer)->assertOk()->assertJsonPath('data.total', 1);
+        $this->api('GET', '/api/orders', $customer)->assertOk()->assertJsonPath('meta.total', 1);
         $this->api('GET', "/api/orders/$order", $customer)->assertOk()->assertJsonPath('data.id', $order);
         $this->api('GET', "/api/orders/$order", $other)->assertNotFound();
         $this->api('GET', '/api/admin/orders', $customer)->assertForbidden();
-        $this->api('GET', '/api/admin/orders', $admin)->assertOk()->assertJsonPath('data.total', 1);
+        $this->api('GET', '/api/admin/orders', $admin)->assertOk()->assertJsonPath('meta.total', 1);
         $this->api('PATCH', "/api/orders/$order/status", $customer, ['status' => 'preparing'])->assertForbidden();
         $this->api('PATCH', "/api/orders/$order/status", $admin, ['status' => 'ready'])->assertConflict();
         $this->api('PATCH', "/api/orders/$order/status", $admin, ['status' => 'preparing'])
             ->assertOk()->assertJsonPath('data.status', 'preparing');
 
         $notification = $this->api('GET', '/api/notifications', $customer)->assertOk()
-            ->assertJsonPath('data.data.0.data.order_id', $order)->json('data.data.0.id');
+            ->assertJsonPath('data.0.data.order_id', $order)->json('data.0.id');
         $this->api('PATCH', "/api/notifications/$notification/read", $other)->assertNotFound();
         $this->api('PATCH', "/api/notifications/$notification/read", $customer)->assertOk();
         $this->assertNotNull($user->notifications()->findOrFail($notification)->read_at);
 
         $this->api('DELETE', "/api/menus/$menu", $admin)->assertOk();
-        $this->api('POST', '/api/orders', $customer, $body)->assertUnprocessable();
+        $this->api('POST', '/api/orders', $customer, $body)->assertUnprocessable()->assertJsonPath('status', 'error')->assertJsonValidationErrors('items');
         $this->api('DELETE', "/api/categories/$category", $admin)->assertOk();
         $this->assertDatabaseHas('order_items', ['order_id' => $order, 'menu_id' => null, 'name' => 'Ayam']);
     }

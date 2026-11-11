@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureCanteenAdmin;
+use App\Http\Middleware\RenderApiErrors;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,9 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias(['canteen-admin' => EnsureCanteenAdmin::class]);
-        $middleware->redirectGuestsTo(fn (Request $request) => $request->is('api/*') ? null : route('login'));
+        $middleware->redirectGuestsTo(fn (Request $request) => $request->is('api', 'api/*') ? null : route('login'));
         $middleware->prependToPriorityList(SubstituteBindings::class, EnsureCanteenAdmin::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->shouldRenderJsonWhen(fn (Request $request) => $request->is('api/*') || $request->expectsJson());
+        $exceptions->respond(new RenderApiErrors);
+        $exceptions->shouldRenderJsonWhen(fn (Request $request) => $request->is('api', 'api/*') || $request->expectsJson());
     })->create();
