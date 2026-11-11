@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\CategoryRequest;
 use App\Models\Category;
 use App\Models\Menu;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 
 class CategoryController extends ApiController
 {
@@ -15,17 +14,17 @@ class CategoryController extends ApiController
         return $this->success('Daftar kategori KantinKu', Category::orderBy('id', 'asc')->get());
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
         $category = new Category;
-        $category->forceFill($this->validated($request, $category))->save();
+        $category->forceFill($request->validated())->save();
 
         return $this->success('Kategori berhasil dibuat.', $category, 201);
     }
 
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
-        $category->forceFill($this->validated($request, $category))->save();
+        $category->forceFill($request->validated())->save();
 
         return $this->success('Kategori berhasil diperbarui.', $category);
     }
@@ -39,13 +38,5 @@ class CategoryController extends ApiController
         });
 
         return $this->success('Kategori berhasil dihapus.');
-    }
-
-    private function validated(Request $request, Category $category): array
-    {
-        return $request->validate([
-            'name' => [$category->exists ? 'sometimes' : 'bail', 'required', 'string', 'max:255', Rule::unique('categories')->ignore($category)],
-            'description' => 'nullable|string|max:1000',
-        ]);
     }
 }
